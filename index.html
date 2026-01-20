@@ -100,4 +100,63 @@
                             "size": "full",
                             "aspectMode": "cover",
                             "aspectRatio": "2.9:3",
-                            "action": { "
+                            "action": { "type": "uri", "uri": "https://www.youtube.com/watch?v=R25N0-61ueE" }
+                        },
+                        "body": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "backgroundColor": "#F6C7B3",
+                            "contents": [
+                                { "type": "text", "text": "คิดแบบกฎ 80/20", "weight": "bold", "size": "md", "color": "#4A148C" },
+                                { "type": "text", "text": "แนะนำโดย : พลพจ บุตรสิงห์", "size": "sm", "color": "#6A1B9A" }
+                            ]
+                        }
+                    }
+                ]
+            }
+        };
+
+        function displayMessage(id) {
+            document.querySelectorAll('.msg').forEach(el => el.style.display = 'none');
+            document.getElementById(id).style.display = 'block';
+        }
+
+        async function main() {
+            displayMessage('loadingMsg');
+            try {
+                // แก้ไข LIFF ID ให้ตรงกับที่สร้างใน Console
+                await liff.init({ liffId: "2007236505-Lbr300GA" });
+
+                if (!liff.isLoggedIn()) {
+                    liff.login();
+                    return;
+                }
+                
+                if (!liff.isApiAvailable("shareTargetPicker")) {
+                    alert("กรุณาเปิดลิงก์นี้ภายในแอป LINE เท่านั้น");
+                    return;
+                }
+
+                const result = await liff.shareTargetPicker([flexMessage]);
+                
+                if (result) {
+                    displayMessage('successMsg');
+                    setTimeout(() => liff.closeWindow(), 1500);
+                } else {
+                    // กรณีผู้ใช้กดกากบาทปิดหน้า Share Picker
+                    liff.closeWindow();
+                }
+
+            } catch (err) {
+                console.error(err);
+                const errorMsgElement = document.getElementById('errorMsg');
+                errorMsgElement.innerHTML = `❌ เกิดข้อผิดพลาด: <br><small>${err.message}</small>`;
+                displayMessage('errorMsg');
+                // หากเกิด Error ไม่ควรปิดหน้าจอทันทีเพื่อให้ผู้ใช้เห็นสาเหตุ
+            }
+        }
+
+        main();
+    </script>
+</body>
+</html>
