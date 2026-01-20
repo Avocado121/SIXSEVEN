@@ -2,64 +2,102 @@
 <html>
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Share Flex Message Ready</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         body {
             margin: 0;
-            font-family: sans-serif;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background: #eef2ff;
+            background: #f0f2f5;
         }
         .msg {
             display: none;
-            padding: 20px 30px;
+            padding: 25px;
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             font-size: 18px;
             text-align: center;
             color: #333;
+            max-width: 85%;
         }
-        #errorMsg { 
-            color: #d9534f;
-            word-break: break-word;
-            max-width: 80vw;
-        }
+        #errorMsg { color: #e74c3c; }
+        .loading-dots:after { content: ' .'; animation: dots 1s steps(5, end) infinite; }
+        @keyframes dots { 0%, 20% { content: ' .'; } 40% { content: ' ..'; } 60% { content: ' ...'; } }
     </style>
 </head>
 <body>
-    <div class="msg" id="loadingMsg">⏳ กำลังเริ่มต้น LIFF และเตรียมการแชร์...</div>
-    <div class="msg" id="successMsg">✅ แชร์ให้เพื่อน ๆ สำเร็จแล้ว</div>
+    <div class="msg" id="loadingMsg">⏳ กำลังเตรียมการแชร์<span class="loading-dots"></span></div>
+    <div class="msg" id="successMsg">✅ แชร์ข้อมูลสำเร็จแล้ว</div>
     <div class="msg" id="errorMsg">❌ เกิดข้อผิดพลาดในการแชร์</div> 
 
     <script>
-        // --- ส่วนที่แก้ไข: โครงสร้าง JSON ของ Flex Message ---
         const flexMessage = {
             type: "flex",
             altText: "📚 แนะนำหนังสือน่าอ่าน โดย นตท.ชั้นปีที่ 2",
             contents: {
-                // <--- นำโค้ด JSON จาก LINE Developer ที่เริ่มต้นด้วย { "type": "bubble" ... } 
-                // หรือ { "type": "carousel" ... } มาวางตรงนี้
-                "type": "bubble",
-                "body": {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                        {
-                            "type": "text",
-                            "text": "ตัวอย่าง Flex Message",
-                            "weight": "bold",
-                            "size": "xl"
+                "type": "carousel",
+                "contents": [
+                    {
+                        "type": "bubble",
+                        "body": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "image",
+                                    "url": "https://img5.pic.in.th/file/secure-sv1/Bool-Roccomendation.png",
+                                    "size": "full",
+                                    "aspectMode": "cover",
+                                    "aspectRatio": "2.3:3"
+                                },
+                                {
+                                    "type": "button",
+                                    "action": {
+                                        "type": "uri",
+                                        "uri": "https://liff.line.me/2008875018-8TAswwPR",
+                                        "label": "ดูรายละเอียด"
+                                    },
+                                    "position": "absolute",
+                                    "offsetTop": "65%",
+                                    "offsetStart": "25%",
+                                    "offsetEnd": "25%"
+                                }
+                            ],
+                            "paddingAll": "none"
                         }
-                    ]
-                }
-                // ---------------------------------------------------------
-            }
-        };
-
-        function displayMessage(id) {
-            document.querySelectorAll('.msg').forEach(el => el
+                    },
+                    {
+                        "type": "bubble",
+                        "hero": {
+                            "type": "image",
+                            "url": "https://img2.pic.in.th/pic/REVIEW-BOOKS.png",
+                            "size": "full",
+                            "aspectMode": "cover",
+                            "aspectRatio": "2.9:3",
+                            "action": { "type": "uri", "uri": "https://www.youtube.com/watch?v=JODFTJkVcnQ" }
+                        },
+                        "body": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "backgroundColor": "#F6C7B3",
+                            "contents": [
+                                { "type": "text", "text": "Oda Nobunaga", "weight": "bold", "size": "md", "color": "#4A148C" },
+                                { "type": "text", "text": "แนะนำโดย : นภทีป์ ศรีณรงค์", "size": "sm", "color": "#6A1B9A" }
+                            ]
+                        }
+                    },
+                    {
+                        "type": "bubble",
+                        "hero": {
+                            "type": "image",
+                            "url": "https://img5.pic.in.th/file/secure-sv1/REVIEW-BOOKS-1.png",
+                            "size": "full",
+                            "aspectMode": "cover",
+                            "aspectRatio": "2.9:3",
+                            "action": { "
